@@ -45,17 +45,17 @@ However, some directories like `.ssh` you want to backup! So review the `.rdiff-
 
 Prepare the target folder where the backup will be stored. Change, if you are not happy with the location.
 ```
-sudo mkdir -p /home/.backups/user1
-sudo chown user1 /home/.backups/user1
+sudo mkdir -p /home/.backups/$USER
+sudo chown $USER /home/.backups/$USER
 ```
 
 Now it is time to create the first backup. We `cd` into the directory so that the relative paths in the `.rdiff-exclude` file work; otherwise those need to be absolut paths.
 ```
-cd /home/user1
-rdiff-backup --no-fsync --exclude-special-files --exclude-globbing-filelist .rdiff-exclude . /home/.backups/user1
+cd /home/$USER
+rdiff-backup --no-fsync --exclude-special-files --exclude-globbing-filelist .rdiff-exclude . /home/.backups/$USER
 ```
 
-Depending on the amount of files, this may take a while. However, running this command a second time is significantly faster. And subsequent runs will only take more disk space if you have modified any files. Under `/home/.backups/user1` you will now find your backup as plain files. No tool is needed to access the latest full backup.
+Depending on the amount of files, this may take a while. However, running this command a second time is significantly faster. And subsequent runs will only take more disk space if you have modified any files. Under `/home/.backups/$USER` you will now find your backup as plain files. No tool is needed to access the latest full backup.
 
 ### Encrypted Remote Copy
 * File level encryption with `gocryptfs`
@@ -65,18 +65,18 @@ Depending on the amount of files, this may take a while. However, running this c
 
 Initialize gocryptfs in the backup folder and create a temporary mountpoint for the encrypted view:
 ```
-gocryptfs -reverse -init /home/.backup/user1/
-mkdir /tmp/user1
+gocryptfs -reverse -init /home/.backup/$USER/
+mkdir /tmp/$USER
 ```
 
-Unlock and monut the encrypted folder. After that you should see encrypted files in `/tmp/user1`
+Unlock and monut the encrypted folder. After that you should see encrypted files in `/tmp/$USER`
 ```
-gocryptfs -reverse /home/.backup/user1/ /tmp/user1
+gocryptfs -reverse /home/.backup/$USER/ /tmp/$USER
 ```
 
 Synchronize the encrypted files to the external storage medium:
 ```
-rsync -av --delete /tmp/user1/ /path/to/my/usb-hdd/encrypted-backups-of-user1
+rsync -av --delete /tmp/$USER/ /path/to/my/usb-hdd/encrypted-backups-of-$USER
 ```
 
 On the external storage or the cloud service there should now be a copy of the encrypted backup. Subsequent runs of the synchronization should finish significantly faster, as only changed files will be transferred.
