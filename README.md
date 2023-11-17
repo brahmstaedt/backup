@@ -45,17 +45,17 @@ However, some directories like `.ssh` you want to backup! So review the `.rdiff-
 
 Prepare the target folder where the backup will be stored. Change, if you are not happy with the location.
 ```
-sudo mkdir -p /home/.backups/$USER
-sudo chown $USER /home/.backups/$USER
+sudo mkdir -p /home/.backup/$USER
+sudo chown $USER /home/.backup/$USER
 ```
 
 Now it is time to create the first backup. We `cd` into the directory so that the relative paths in the `.rdiff-exclude` file work; otherwise those need to be absolut paths.
 ```
 cd /home/$USER
-rdiff-backup --no-fsync --exclude-special-files --exclude-globbing-filelist .rdiff-exclude . /home/.backups/$USER
+rdiff-backup --no-fsync --exclude-special-files --exclude-globbing-filelist .rdiff-exclude . /home/.backup/$USER
 ```
 
-Depending on the amount of files, this may take a while. However, running this command a second time is significantly faster. And subsequent runs will only take more disk space if you have modified any files. Under `/home/.backups/$USER` you will now find your backup as plain files. No tool is needed to access the latest full backup.
+Depending on the amount of files, this may take a while. However, running this command a second time is significantly faster. And subsequent runs will only take more disk space if you have modified any files. Under `/home/.backup/$USER` you will now find your backup as plain files. No tool is needed to access the latest full backup.
 
 ### Encrypted Remote Copy
 * File level encryption with `gocryptfs`
