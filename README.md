@@ -66,17 +66,17 @@ Depending on the amount of files, this may take a while. However, running this c
 Initialize gocryptfs in the backup folder and create a temporary mountpoint for the encrypted view:
 ```
 gocryptfs -reverse -init /home/.backup/$USER/
-mkdir /tmp/$USER
+mkdir /home/.backup-encrypted/$USER
 ```
 
-Unlock and monut the encrypted folder. After that you should see encrypted files in `/tmp/$USER`
+Unlock and monut the encrypted folder. After that you should see encrypted files in `/home/.backup-encrypted/$USER`
 ```
-gocryptfs -reverse /home/.backup/$USER/ /tmp/$USER
+gocryptfs -reverse /home/.backup/$USER/ /home/.backup-encrypted/$USER
 ```
 
 Synchronize the encrypted files to the external storage medium:
 ```
-rsync -av --delete /tmp/$USER/ /path/to/my/usb-hdd/encrypted-backups-of-$USER
+rsync -av --delete /home/.backup-encrypted/$USER/ /path/to/my/usb-hdd/encrypted-backups-of-$USER
 ```
 
 On the external storage or the cloud service there should now be a copy of the encrypted backup. Subsequent runs of the synchronization should finish significantly faster, as only changed files will be transferred.
